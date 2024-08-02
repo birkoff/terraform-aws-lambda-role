@@ -1,10 +1,7 @@
-variable "app_name" {
+variable "prefix" {
   default = ""
 }
 
 variable "aws_account_id" {
-  default = ""
-}
-variable "env" {
   default = ""
 }
