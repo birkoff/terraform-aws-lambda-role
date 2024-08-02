@@ -47,15 +47,7 @@ data "aws_iam_policy_document" "inline_policy" {
       "logs:CreateLogGroup",
       "logs:PutLogEvents",
     ]
-    resources = ["*"]
-  }
-  statement {
-    actions = [
-      "textract:DetectDocumentText",
-      "textract:StartDocumentTextDetection",
-      "textract:GetDocumentTextDetection"
-    ]
-    resources = ["*"]
+    resources = ["arn:aws:logs:us-east-1:*:log-group:/aws/lambda/${var.prefix}*"]
   }
   statement {
     actions   = ["xray:*"]
@@ -63,21 +55,13 @@ data "aws_iam_policy_document" "inline_policy" {
   }
   statement {
     actions = [
-      "secretsmanager:GetSecretValue",
-    ]
-    resources = ["arn:aws:secretsmanager:*:*:secret:email*", "arn:aws:secretsmanager:*:*:secret:/shared-services/*"]
-  }
-  statement {
-    actions = [
-      "sqs:SendMessage",
-      "sqs:ReceiveMessage",
-      "sqs:DeleteMessage",
-      "sqs:GetQueueAttributes",
-      "sqs:Get*",
-      "sqs:List*"
+      "events:PutEvents",
+          "events:List*",
+          "events:InvokeApiDestination",
+          "events:Describe*",
     ]
     resources = [
-      "arn:aws:sqs:us-east-1:${var.aws_account_id}:${var.prefix}*",
+          "arn:aws:events:us-east-1:*:event-bus/${var.prefix}*",
     ]
   }
   statement {
