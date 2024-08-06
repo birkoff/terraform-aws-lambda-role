@@ -3,7 +3,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
     actions = ["sts:AssumeRole"]
 
     principals {
-      type        = "Service"
+      type = "Service"
       identifiers = [
         "lambda.amazonaws.com",
       ]
@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      type        = "Service"
+      type = "Service"
       identifiers = [
         "events.amazonaws.com",
       ]
@@ -22,87 +22,44 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 
 data "aws_iam_policy_document" "inline_policy" {
   statement {
-    actions = [
-      "events:CreateArchive",
-      "events:CreateConnection",
-      "events:Describe*",
-      "events:InvokeApiDestination",
-      "events:List*",
-      "events:PutEvents",
-      "events:PutPartnerEvents",
-      "events:PutPermission",
-      "events:PutRule",
-      "events:PutTargets",
-      "events:StartReplay",
-      "events:TestEventPattern",
-      "events:UpdateApiDestination",
-      "events:UpdateArchive",
-      "events:UpdateConnection",
-    ]
+    actions   = var.actions["events"]
+    resources = var.resources["events"]
+  }
+  statement {
+    actions   = var.actions["logs"]
+    resources = var.resources["logs"]
+  }
+  statement {
+    actions   = var.actions["xray"]
     resources = ["*"]
   }
   statement {
-    actions = [
-      "logs:CreateLogStream",
-      "logs:CreateLogGroup",
-      "logs:PutLogEvents",
-    ]
-    resources = ["arn:aws:logs:us-east-1:*:log-group:/aws/lambda/${var.prefix}*"]
+    actions   = var.actions["secretsmanager"]
+    resources = var.resources["secretsmanager"]
   }
   statement {
-    actions   = ["xray:*"]
-    resources = ["*"]
+    actions   = var.actions["ssm"]
+    resources = var.resources["ssm"]
   }
   statement {
-    actions = [
-      "events:PutEvents",
-          "events:List*",
-          "events:InvokeApiDestination",
-          "events:Describe*",
-    ]
-    resources = [
-          "arn:aws:events:us-east-1:*:event-bus/${var.prefix}*",
-    ]
+    actions   = var.actions["s3"]
+    resources = var.resources["s3"]
   }
   statement {
-    actions = [
-      "ssm:List*",
-      "ssm:Get*",
-      "ssm:Describe*"
-    ]
-    resources = [
-      "arn:aws:ssm:us-east-1:${var.aws_account_id}:parameter/${var.prefix}/*",
-    ]
-  }
-  
-  statement {
-    actions = [
-      "ec2:CreateNetworkInterface",
-      "ec2:DescribeNetworkInterfaces",
-      "ec2:DeleteNetworkInterface",
-      "ec2:AssignPrivateIpAddresses",
-      "ec2:UnassignPrivateIpAddresses",
-      "ec2:List*",
-      "ec2:Get*",
-      "ec2:Describe*",
-      "ec2:UnassignPrivateIpAddresses",
-      "ec2:List*",
-      "ec2:Get*",
-      "ec2:DescribeNetworkInterfaces",
-      "ec2:Describe*",
-      "ec2:DeleteNetworkInterface",
-      "ec2:CreateNetworkInterface",
-      "ec2:AssignPrivateIpAddresses"
-    ]
-    resources = ["*"]
+    actions   = var.actions["ec2"]
+    resources = ["*"] # This is required for the Lambda to be able to create ENIs
   }
   statement {
-    actions = [
-      "lambda:*",
-    ]
-    resources = [
-      "arn:aws:lambda:us-east-1:${var.aws_account_id}:function:${var.prefix}*",
-    ]
+    actions   = var.actions["lambda"]
+    resources = var.resources["lambda"]
+  }
+  statement {
+    actions   = var.actions["ses"]
+    resources = var.resources["ses"]
+  }
+  statement {
+    actions   = var.actions["kms"]
+    resources = var.resources["kms"]
   }
 }
 
