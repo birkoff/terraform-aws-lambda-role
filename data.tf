@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 
 data "aws_iam_policy_document" "inline_policy" {
   statement {
-    actions   = var.actions["events"]
+    actions   = length(var.resources["events"]) > 0 ? var.actions["events"] : []
     resources = var.resources["events"]
   }
   statement {
@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "inline_policy" {
     resources = var.resources["ssm"]
   }
   statement {
-    actions   = var.actions["s3"]
+    actions   = length(var.resources["s3"]) > 0 ? var.actions["s3"] : []
     resources = var.resources["s3"]
   }
   statement {
@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "inline_policy" {
     resources = var.resources["lambda"]
   }
   statement {
-    actions   = var.actions["ses"]
+    actions   = length(var.resources["ses"]) > 0 ? var.actions["ses"] : []
     resources = var.resources["ses"]
   }
   statement {
