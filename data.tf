@@ -42,10 +42,6 @@ data "aws_iam_policy_document" "inline_policy" {
     resources = var.resources["ssm"]
   }
   statement {
-    actions   = var.actions["s3"]
-    resources = var.resources["s3"]
-  }
-  statement {
     actions   = var.actions["ec2"]
     resources = ["*"] # This is required for the Lambda to be able to create ENIs
   }
@@ -54,12 +50,8 @@ data "aws_iam_policy_document" "inline_policy" {
     resources = var.resources["lambda"]
   }
   statement {
-    actions   = var.actions["ses"]
-    resources = var.resources["ses"]
-  }
-  statement {
     actions   = var.actions["kms"]
-    resources = var.resources["kms"]
+    resources = ["*"]
   }
 }
 
