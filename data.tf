@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "inline_policy" {
     resources = var.resources["textract"]
   }
   statement {
-    actions   = "lambda:GetLayerVersion"
+    actions   = ["lambda:GetLayerVersion"]
     resources = ["arn:aws:lambda:*:*:layer:*:*"]
   }
   statement {
