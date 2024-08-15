@@ -86,7 +86,10 @@ variable "actions" {
     ],
     "kms" : [
       "kms:*",
-    ]
+    ],
+    "textract" : [
+      "textract:*",
+    ],
   }
 }
 
