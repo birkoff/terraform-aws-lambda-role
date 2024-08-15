@@ -55,8 +55,7 @@ data "aws_iam_policy_document" "inline_policy" {
   }
   statement {
     actions   = "lambda:GetLayerVersion"
-    resources = "arn:aws:lambda:*:*:layer:*:*"
-    version   = "2012-10-17"
+    resources = ["arn:aws:lambda:*:*:layer:*:*"]
   }
   statement {
     actions   = var.actions["kms"]
