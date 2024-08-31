@@ -49,10 +49,10 @@ data "aws_iam_policy_document" "inline_policy" {
     actions   = var.actions["lambda"]
     resources = var.resources["lambda"]
   }
-  statement {
-    actions   = var.actions["textract"]
-    resources = var.resources["textract"]
-  }
+#   statement {
+#     actions   = var.actions["textract"]
+#     resources = var.resources["textract"]
+#   }
   statement {
     actions   = ["lambda:GetLayerVersion"]
     resources = ["arn:aws:lambda:*:*:layer:*:*"]

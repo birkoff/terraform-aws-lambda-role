@@ -9,7 +9,7 @@ resource "aws_iam_role" "this" {
     policy = data.aws_iam_policy_document.inline_policy.json
   }
 }
-
+########
 data "aws_iam_policy_document" "ses" {
   statement {
     effect    = "Allow"
@@ -53,3 +53,28 @@ resource "aws_iam_role_policy_attachment" "s3" {
   role       = aws_iam_role.this.name
   policy_arn = aws_iam_policy.s3.0.arn
 }
+########
+
+data "aws_iam_policy_document" "textract" {
+  statement {
+    effect    = "Allow"
+    actions   = lookup(var.actions, "textract", [])
+    resources = lookup(var.resources, "textract", [])
+  }
+}
+
+resource "aws_iam_policy" "textract" {
+  count       = length(lookup(var.resources, "textract", [] )) > 0 ? 1 : 0
+  name        = "${var.name_prefix}-textract-policy"
+  description = "${var.name_prefix} textract policy"
+  policy      = data.aws_iam_policy_document.textract.json
+}
+
+resource "aws_iam_role_policy_attachment" "textract" {
+  depends_on = [aws_iam_policy.textract]
+  count       = length(lookup(var.resources, "textract", [] )) > 0 ? 1 : 0
+  role       = aws_iam_role.this.name
+  policy_arn = aws_iam_policy.textract.0.arn
+}
+
+########
